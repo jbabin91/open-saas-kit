@@ -21,27 +21,53 @@
     "dev": {
       "cache": false,
       "persistent": true,
-      "dependsOn": ["^build"]
+      "interruptible": true
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": true
     },
     "lint": {
-      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.{ts,tsx,js,jsx,cjs,mjs}",
+        "eslint.config.*",
+        "!**/node_modules/**"
+      ],
       "outputs": ["node_modules/.cache/eslint/**"]
     },
     "//#lint:root": {
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "*.{ts,tsx,js,jsx,cjs,mjs}",
+        "eslint.config.*"
+      ],
       "outputs": ["node_modules/.cache/eslint/**"]
     },
     "lint:fix": {
-      "dependsOn": ["^build"],
       "cache": false
     },
     "//#lint:fix:root": {
       "cache": false
     },
     "test": {
-      "dependsOn": ["^build"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.{ts,tsx}",
+        "**/*.test.{ts,tsx}",
+        "**/*.spec.{ts,tsx}",
+        "vitest.config.*",
+        "!**/node_modules/**"
+      ]
     },
     "typecheck": {
-      "dependsOn": ["^build"],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "**/*.{ts,tsx}",
+        "tsconfig*.json",
+        "!**/node_modules/**"
+      ],
       "outputs": ["node_modules/.cache/typescript/**"]
     },
     "db:generate": {

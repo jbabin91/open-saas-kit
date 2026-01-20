@@ -19,6 +19,7 @@
     "lint:md:fix": "markdownlint-cli2 --fix '**/*.md'",
     "lint:root": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:ws": "sherif",
+    "start": "turbo run start",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },

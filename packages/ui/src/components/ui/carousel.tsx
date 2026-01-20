@@ -189,10 +189,10 @@ function CarouselPrevious({
         className,
       )}
       data-slot="carousel-previous"
-      disabled={!canScrollPrev}
+      isDisabled={!canScrollPrev}
       size={size}
       variant={variant}
-      onClick={scrollPrev}
+      onPress={scrollPrev}
       {...props}
     >
       <RiArrowLeftSLine />
@@ -219,10 +219,10 @@ function CarouselNext({
         className,
       )}
       data-slot="carousel-next"
-      disabled={!canScrollNext}
+      isDisabled={!canScrollNext}
       size={size}
       variant={variant}
-      onClick={scrollNext}
+      onPress={scrollNext}
       {...props}
     >
       <RiArrowRightSLine />

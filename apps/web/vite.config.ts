@@ -1,5 +1,3 @@
-import { fileURLToPath, URL } from 'node:url';
-
 import optimizeLocales from '@react-aria/optimize-locales-plugin';
 import tailwindcss from '@tailwindcss/vite';
 import { devtools } from '@tanstack/devtools-vite';
@@ -10,10 +8,9 @@ import { defineConfig } from 'vite';
 import viteTsConfigPaths from 'vite-tsconfig-paths';
 
 const config = defineConfig({
-  resolve: {
-    alias: {
-      '@': fileURLToPath(new URL('src', import.meta.url)),
-    },
+  optimizeDeps: {
+    // Don't pre-bundle workspace packages so changes are picked up immediately
+    exclude: ['@oakoss/ui'],
   },
   plugins: [
     {
@@ -32,6 +29,12 @@ const config = defineConfig({
     tanstackStart(),
     viteReact(),
   ],
+  server: {
+    watch: {
+      // Watch workspace packages for HMR
+      ignored: ['!**/node_modules/@oakoss/**'],
+    },
+  },
 });
 
 export default config;

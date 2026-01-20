@@ -5,7 +5,7 @@ import {
 } from '@remixicon/react';
 import * as React from 'react';
 
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
@@ -39,8 +39,16 @@ function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
 
 type PaginationLinkProps = {
   isActive?: boolean;
-} & Pick<React.ComponentProps<typeof Button>, 'size'> &
-  React.ComponentProps<'a'>;
+  size?:
+    | 'default'
+    | 'sm'
+    | 'lg'
+    | 'icon'
+    | 'icon-sm'
+    | 'icon-lg'
+    | 'icon-xs'
+    | 'xs';
+} & React.ComponentProps<'a'>;
 
 function PaginationLink({
   children,
@@ -50,22 +58,21 @@ function PaginationLink({
   ...props
 }: PaginationLinkProps) {
   return (
-    <Button
-      className={cn(className)}
-      nativeButton={false}
-      render={
-        <a
-          aria-current={isActive ? 'page' : undefined}
-          data-active={isActive}
-          data-slot="pagination-link"
-          {...props}
-        >
-          {children}
-        </a>
-      }
-      size={size}
-      variant={isActive ? 'outline' : 'ghost'}
-    />
+    <a
+      aria-current={isActive ? 'page' : undefined}
+      className={cn(
+        buttonVariants({
+          size,
+          variant: isActive ? 'outline' : 'ghost',
+        }),
+        className,
+      )}
+      data-active={isActive}
+      data-slot="pagination-link"
+      {...props}
+    >
+      {children}
+    </a>
   );
 }
 

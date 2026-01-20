@@ -18,13 +18,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@oakoss/config": "workspace:*",
+    "@oakoss/config": "workspace:^",
     "drizzle-orm": "^0.45.1",
     "postgres": "^3.4.8"
   },
   "devDependencies": {
-    "@oakoss/eslint-config": "workspace:*",
-    "@oakoss/typescript-config": "workspace:*",
+    "@oakoss/eslint-config": "workspace:^",
+    "@oakoss/typescript-config": "workspace:^",
     "@types/node": "^25.0.9",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9.39.2",

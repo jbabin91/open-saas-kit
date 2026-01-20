@@ -10,7 +10,7 @@ import {
   getDefaultClassNames,
 } from 'react-day-picker';
 
-import { Button, buttonVariants } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 function Calendar({
@@ -23,7 +23,13 @@ function Calendar({
   components,
   ...props
 }: React.ComponentProps<typeof DayPicker> & {
-  buttonVariant?: React.ComponentProps<typeof Button>['variant'];
+  buttonVariant?:
+    | 'default'
+    | 'destructive'
+    | 'ghost'
+    | 'link'
+    | 'outline'
+    | 'secondary';
 }) {
   const defaultClassNames = getDefaultClassNames();
 
@@ -183,6 +189,12 @@ function Calendar({
   );
 }
 
+/**
+ * Uses native button with buttonVariants styling instead of RAC Button because:
+ * - react-day-picker manages focus via native DOM refs (modifiers.focused)
+ * - It expects onClick as standard MouseEventHandler, incompatible with RAC onPress
+ * - buttonVariants provides consistent styling with our Button component
+ */
 function CalendarDayButton({
   className,
   day,
@@ -197,8 +209,10 @@ function CalendarDayButton({
   }, [modifiers.focused]);
 
   return (
-    <Button
+    <button
+      ref={ref}
       className={cn(
+        buttonVariants({ size: 'icon', variant: 'ghost' }),
         'data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground data-[range-middle=true]:bg-muted data-[range-middle=true]:text-foreground data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-ring/50 dark:hover:text-foreground relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 border-0 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] data-[range-end=true]:rounded-(--cell-radius) data-[range-end=true]:rounded-r-(--cell-radius) data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-(--cell-radius) data-[range-start=true]:rounded-l-(--cell-radius) [&>span]:text-xs [&>span]:opacity-70',
         defaultClassNames.day,
         className,
@@ -213,8 +227,7 @@ function CalendarDayButton({
         !modifiers.range_end &&
         !modifiers.range_middle
       }
-      size="icon"
-      variant="ghost"
+      type="button"
       {...props}
     />
   );
