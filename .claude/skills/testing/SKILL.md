@@ -203,9 +203,12 @@ it('loads user data', async () => {
 - **Coverage analysis**: For comprehensive coverage review, use `Task` agent
 - **Code review**: After writing tests, delegate to `code-reviewer` agent
 
-## Topic References
+## Related Skills
 
-- [Setup & Configuration](setup-configuration.md) - Vitest config, setup file, environments
-- [Mocking Patterns](mocking-patterns.md) - Functions, modules, spies, timers, Drizzle
-- [Testing Components](testing-components.md) - Queries, matchers, hooks, error boundaries
-- [Server, DB & Auth](testing-server-db-auth.md) - Server functions, database, auth flows
+| Task                    | Skill                                                    |
+| ----------------------- | -------------------------------------------------------- |
+| Query testing patterns  | [tanstack-query](../tanstack-query/SKILL.md)             |
+| Form testing patterns   | [tanstack-form](../tanstack-form/SKILL.md)               |
+| Router testing patterns | [tanstack-router](../tanstack-router/SKILL.md)           |
+| Error boundary testing  | [error-boundaries](../error-boundaries/SKILL.md)         |
+| Integration flows       | [integration-patterns](../integration-patterns/SKILL.md) |

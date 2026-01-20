@@ -162,18 +162,18 @@ const updateUser = createServerFn({ method: 'POST' })
 
 ## Common Mistakes
 
-| Mistake                                | Correct Pattern                              |
-| -------------------------------------- | -------------------------------------------- |
-| Missing auth check                     | Always verify session from request headers   |
-| Throwing instead of returning error    | Return `{ error, code }` format              |
-| Not validating input                   | Always use `.inputValidator(schema)`         |
-| Using Zod v3 syntax                    | Use v4: `z.email()` not `z.string().email()` |
-| Using GET for mutations                | Use POST for create/update/delete            |
-| Not logging server errors              | Use `console.error()` before returning       |
-| Exposing raw DB errors                 | Catch and return user-friendly messages      |
-| Missing error code                     | Always include both `error` and `code`       |
-| Returning sensitive data in errors     | Only return what the client needs            |
-| Not handling validation errors in POST | Check `result.success` and return 400        |
+| Mistake                                | Correct Pattern                            |
+| -------------------------------------- | ------------------------------------------ |
+| Missing auth check                     | Always verify session from request headers |
+| Throwing instead of returning error    | Return `{ error, code }` format            |
+| Not validating input                   | Always use `.inputValidator(schema)`       |
+| Not validating input                   | Always use `.inputValidator(schema)`       |
+| Using GET for mutations                | Use POST for create/update/delete          |
+| Not logging server errors              | Use `console.error()` before returning     |
+| Exposing raw DB errors                 | Catch and return user-friendly messages    |
+| Missing error code                     | Always include both `error` and `code`     |
+| Returning sensitive data in errors     | Only return what the client needs          |
+| Not handling validation errors in POST | Check `result.success` and return 400      |
 
 ## Delegation
 

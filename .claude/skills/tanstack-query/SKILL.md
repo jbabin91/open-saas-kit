@@ -63,6 +63,41 @@ queryClient.prefetchQuery(postOptions('789'));
 queryClient.invalidateQueries({ queryKey: postOptions('123').queryKey });
 ```
 
+## Query Key Factory (TkDodo Pattern)
+
+For granular cache invalidation, separate keys from options:
+
+```tsx
+// apps/web/src/modules/posts/hooks/post-queries.ts
+export const postKeys = {
+  all: ['posts'] as const,
+  lists: () => [...postKeys.all, 'list'] as const,
+  list: (filters: PostFilters) => [...postKeys.lists(), filters] as const,
+  details: () => [...postKeys.all, 'detail'] as const,
+  detail: (id: string) => [...postKeys.details(), id] as const,
+};
+
+export const postQueries = {
+  list: (filters: PostFilters) =>
+    queryOptions({
+      queryKey: postKeys.list(filters),
+      queryFn: () => getPosts({ data: filters }),
+    }),
+  detail: (id: string) =>
+    queryOptions({
+      queryKey: postKeys.detail(id),
+      queryFn: () => getPost({ data: { id } }),
+    }),
+};
+
+// Granular invalidation
+queryClient.invalidateQueries({ queryKey: postKeys.all }); // All posts
+queryClient.invalidateQueries({ queryKey: postKeys.lists() }); // All lists
+queryClient.invalidateQueries({ queryKey: postKeys.detail('123') }); // One post
+```
+
+See [Query Patterns](query-patterns.md) for more key factory patterns.
+
 ## Mutations
 
 ```tsx

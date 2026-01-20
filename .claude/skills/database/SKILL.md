@@ -49,11 +49,11 @@ export const users = pgTable('users', {
   email: text().notNull().unique(),
   emailVerified: boolean().notNull().default(false),
   image: text(),
-  createdAt: timestamp().notNull().defaultNow(),
-  updatedAt: timestamp()
+  createdAt: timestamp({ mode: 'date' }).notNull().defaultNow(),
+  updatedAt: timestamp({ mode: 'date' })
     .notNull()
     .defaultNow()
-    .$onUpdateFn(() => new Date()),
+    .$onUpdate(() => new Date()),
 });
 
 // Type inference

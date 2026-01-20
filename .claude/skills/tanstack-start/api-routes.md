@@ -7,6 +7,7 @@ Use `createFileRoute` with a `server.handlers` object to create API endpoints:
 ```tsx
 // apps/web/src/routes/api/posts.ts
 import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 import { db } from '@oakoss/database';
 import { auth } from '@oakoss/auth/server';
 
@@ -43,7 +44,10 @@ export const Route = createFileRoute('/api/posts')({
 
         if (!result.success) {
           return Response.json(
-            { error: 'Validation failed', details: result.error.flatten() },
+            {
+              error: 'Validation failed',
+              details: z.treeifyError(result.error),
+            },
             { status: 400 },
           );
         }
@@ -65,6 +69,7 @@ export const Route = createFileRoute('/api/posts')({
 ```tsx
 // apps/web/src/routes/api/posts/$id.ts
 import { createFileRoute } from '@tanstack/react-router';
+import { z } from 'zod';
 import { db, eq, and } from '@oakoss/database';
 import { posts } from '@oakoss/database/schema';
 import { auth } from '@oakoss/auth/server';
@@ -96,7 +101,7 @@ export const Route = createFileRoute('/api/posts/$id')({
 
         if (!result.success) {
           return Response.json(
-            { error: result.error.flatten() },
+            { error: z.treeifyError(result.error) },
             { status: 400 },
           );
         }

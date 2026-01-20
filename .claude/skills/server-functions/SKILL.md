@@ -154,7 +154,7 @@ const serverFn = createServerFn({ method: 'POST' }).handler(
 | Missing auth check                  | Always verify session from request headers        |
 | Throwing instead of returning error | Return `{ error, code }` format                   |
 | Not validating input                | Always use `.inputValidator(schema)`              |
-| Using Zod v3 syntax                 | Use v4: `z.email()` not `z.string().email()`      |
+| Using deprecated Zod v3 syntax      | Use `z.email()` not `z.string().email()`          |
 | Missing error code                  | Return `{ error: 'message', code: 'ERROR_CODE' }` |
 | Not logging server errors           | Use `console.error()` before returning            |
 | Returning raw DB errors             | Catch and return user-friendly messages           |

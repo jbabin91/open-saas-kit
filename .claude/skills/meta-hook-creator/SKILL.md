@@ -321,87 +321,7 @@ The `once: true` option runs the hook only once per session (skills/commands onl
 
 ## Script-Based Hooks
 
-For complex logic, use Python scripts with uv (preferred over bash for readability and maintainability):
-
-```json
-{
-  "hooks": {
-    "PostToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-write.py"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
-
-```python
-#!/usr/bin/env -S uv run --quiet --script
-# /// script
-# requires-python = ">=3.11"
-# ///
-"""Post-write hook for formatting and validation."""
-
-import json
-import subprocess
-import sys
-from pathlib import Path
-
-def main() -> int:
-    input_data = json.loads(sys.stdin.read())
-    file_path = input_data.get("tool_input", {}).get("file_path", "")
-
-    if not file_path or not Path(file_path).exists():
-        return 0
-
-    # Format based on file type
-    if file_path.endswith((".ts", ".tsx")):
-        subprocess.run(["npx", "prettier", "--write", file_path],
-                      capture_output=True)
-    elif file_path.endswith(".md"):
-        subprocess.run(["npx", "markdownlint", "--fix", file_path],
-                      capture_output=True)
-
-    return 0
-
-if __name__ == "__main__":
-    sys.exit(main())
-```
-
-### Python Hook Template
-
-```python
-#!/usr/bin/env -S uv run --quiet --script
-# /// script
-# requires-python = ">=3.11"
-# ///
-"""Hook description."""
-
-import json
-import sys
-
-def main() -> int:
-    input_data = json.loads(sys.stdin.read())
-
-    # Extract relevant fields
-    tool_input = input_data.get("tool_input", {})
-    file_path = tool_input.get("file_path", "")
-    content = tool_input.get("content", "")
-
-    # Your logic here
-
-    # Exit codes: 0=success, 1=error, 2=block (PreToolUse only)
-    return 0
-
-if __name__ == "__main__":
-    sys.exit(main())
-```
+For complex logic, use Python scripts with uv instead of inline bash. See [reference.md](reference.md#script-based-hooks) for templates and examples.
 
 ## Common Mistakes
 
@@ -440,6 +360,7 @@ uv run .claude/skills/meta-hook-creator/scripts/validate-hook.py .claude/setting
 ## Additional Resources
 
 - For advanced JSON output, MCP integration, security: [reference.md](reference.md)
+- For complete Python hook examples: [examples.md](examples.md)
 
 ## References
 

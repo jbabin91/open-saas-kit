@@ -2,6 +2,90 @@
 
 Advanced patterns, JSON schemas, and detailed configuration.
 
+## Script-Based Hooks
+
+For complex logic, use Python scripts with uv (preferred over bash for readability and maintainability):
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/post-write.py"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+```python
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""Post-write hook for formatting and validation."""
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+def main() -> int:
+    input_data = json.loads(sys.stdin.read())
+    file_path = input_data.get("tool_input", {}).get("file_path", "")
+
+    if not file_path or not Path(file_path).exists():
+        return 0
+
+    # Format based on file type
+    if file_path.endswith((".ts", ".tsx")):
+        subprocess.run(["npx", "prettier", "--write", file_path],
+                      capture_output=True)
+    elif file_path.endswith(".md"):
+        subprocess.run(["npx", "markdownlint", "--fix", file_path],
+                      capture_output=True)
+
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
+### Python Hook Template
+
+```python
+#!/usr/bin/env -S uv run --quiet --script
+# /// script
+# requires-python = ">=3.11"
+# ///
+"""Hook description."""
+
+import json
+import sys
+
+def main() -> int:
+    input_data = json.loads(sys.stdin.read())
+
+    # Extract relevant fields
+    tool_input = input_data.get("tool_input", {})
+    file_path = tool_input.get("file_path", "")
+    content = tool_input.get("content", "")
+
+    # Your logic here
+
+    # Exit codes: 0=success, 1=error, 2=block (PreToolUse only)
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
+```
+
 ## Hook Input Schemas
 
 All hooks receive JSON via stdin with common fields:
@@ -360,91 +444,7 @@ echo $?  # Check exit code
 
 ## Complete Examples
 
-### Python PreToolUse Validator
-
-```python
-#!/usr/bin/env -S uv run --quiet --script
-# /// script
-# requires-python = ">=3.11"
-# ///
-import json
-import re
-import sys
-
-BLOCKED_PATTERNS = [
-    (r"\brm\s+-rf\b", "Blocked: rm -rf is dangerous"),
-    (r"--force\b", "Blocked: --force operations disabled"),
-]
-
-try:
-    data = json.load(sys.stdin)
-except json.JSONDecodeError:
-    sys.exit(1)
-
-command = data.get("tool_input", {}).get("command", "")
-
-for pattern, message in BLOCKED_PATTERNS:
-    if re.search(pattern, command, re.I):
-        print(message, file=sys.stderr)
-        sys.exit(2)
-
-sys.exit(0)
-```
-
-### Python UserPromptSubmit with Context
-
-```python
-#!/usr/bin/env -S uv run --quiet --script
-# /// script
-# requires-python = ">=3.11"
-# ///
-import json
-import sys
-import datetime
-
-try:
-    data = json.load(sys.stdin)
-except json.JSONDecodeError:
-    sys.exit(1)
-
-# Add context to conversation
-context = f"Current time: {datetime.datetime.now()}"
-print(context)
-
-sys.exit(0)
-```
-
-### Auto-Approve Documentation Files
-
-```python
-#!/usr/bin/env -S uv run --quiet --script
-# /// script
-# requires-python = ">=3.11"
-# ///
-import json
-import sys
-
-try:
-    data = json.load(sys.stdin)
-except json.JSONDecodeError:
-    sys.exit(1)
-
-tool_name = data.get("tool_name", "")
-file_path = data.get("tool_input", {}).get("file_path", "")
-
-if tool_name == "Read" and file_path.endswith((".md", ".txt", ".json")):
-    output = {
-        "hookSpecificOutput": {
-            "hookEventName": "PreToolUse",
-            "permissionDecision": "allow",
-            "permissionDecisionReason": "Documentation auto-approved"
-        },
-        "suppressOutput": True
-    }
-    print(json.dumps(output))
-
-sys.exit(0)
-```
+For complete Python hook examples, see [examples.md](examples.md).
 
 ## Exit Code Quick Reference
 

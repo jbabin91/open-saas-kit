@@ -149,8 +149,13 @@ function EditForm() {
   const [isDirty, setIsDirty] = useState(false);
 
   useBlocker({
-    blockerFn: () => window.confirm('You have unsaved changes. Leave anyway?'),
-    condition: isDirty,
+    shouldBlockFn: () => {
+      if (!isDirty) return false;
+      const shouldLeave = window.confirm(
+        'You have unsaved changes. Leave anyway?',
+      );
+      return !shouldLeave; // Return true to BLOCK, false to allow
+    },
   });
 
   return <form>{/* ... */}</form>;

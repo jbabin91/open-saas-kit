@@ -5,60 +5,186 @@ description: React hooks + performance patterns. Use for useEffect, useMemo, use
 
 # React Fundamentals
 
-## Quick Decision Framework
-
-| Question                               | Solution                                    | Reference                                    |
-| -------------------------------------- | ------------------------------------------- | -------------------------------------------- |
-| Should I use useEffect?                | Probably not - see decision tree            | [hooks.md](hooks.md)                         |
-| How do I compute values from props?    | Calculate during render                     | [alternatives.md](alternatives.md)           |
-| When should I useMemo/useCallback?     | Only for expensive ops or memoized children | [performance.md](performance.md)             |
-| Is my component re-rendering too much? | Check prop stability, state colocation      | [performance.md](performance.md)             |
-| Multiple awaits in sequence?           | Use Promise.all for independent fetches     | [advanced-patterns.md](advanced-patterns.md) |
-| State update blocks the UI?            | Use useTransition for non-urgent updates    | [advanced-patterns.md](advanced-patterns.md) |
-
 ## Core Philosophy
 
 **Effects are escape hatches.** They synchronize React with external systems. If no external system is involved, you likely don't need one.
 
 **Performance optimization is targeted.** Don't memoize everything. Profile first, optimize measurable bottlenecks.
 
-## Topics
+## useEffect Decision Tree
 
-### Hooks
+```text
+Do I need useEffect?
 
-- [Hooks Best Practices](hooks.md) - Effect philosophy, decision framework
-- [Anti-Patterns](anti-patterns.md) - Common useEffect mistakes with fixes
-- [Alternatives to useEffect](alternatives.md) - What to use instead
+Is there an external system involved?
+├── No → Don't use useEffect
+│   ├── Derived state? → Calculate during render
+│   ├── Event response? → Handle in event handler
+│   └── Data fetching? → Use TanStack Query
+└── Yes → Maybe use useEffect
+    ├── Browser APIs (focus, scroll, localStorage)
+    ├── Third-party widgets (maps, charts)
+    ├── Network connections (WebSockets)
+    └── Analytics/logging
+```
 
-### Performance
+## Derived State (No Effect Needed)
 
-- [Performance Optimization](performance.md) - Memoization, re-renders, bundle size
-- [Performance Reference](performance-reference.md) - DevTools, profiling, virtualization
+```tsx
+// ❌ Bad - useEffect for derived state
+const [fullName, setFullName] = useState('');
+useEffect(() => {
+  setFullName(`${firstName} ${lastName}`);
+}, [firstName, lastName]);
 
-### Advanced
+// ✅ Good - calculate during render
+const fullName = `${firstName} ${lastName}`;
 
-- [Advanced Patterns](advanced-patterns.md) - Async waterfalls, useTransition, Set/Map lookups
+// ✅ With memoization (only if expensive)
+const sortedItems = useMemo(
+  () => items.toSorted((a, b) => a.name.localeCompare(b.name)),
+  [items],
+);
+```
+
+## Event Handlers (No Effect Needed)
+
+```tsx
+// ❌ Bad - effect chain for event response
+useEffect(() => {
+  if (submitted) {
+    navigate('/success');
+  }
+}, [submitted]);
+
+// ✅ Good - handle in event
+const handleSubmit = async () => {
+  await submitForm();
+  navigate('/success');
+};
+```
+
+## Performance Patterns
+
+### useMemo - Expensive Calculations Only
+
+```tsx
+// ❌ Bad - memoizing cheap operations
+const doubled = useMemo(() => value * 2, [value]);
+
+// ✅ Good - memoizing expensive operations
+const sortedItems = useMemo(
+  () => items.toSorted((a, b) => a.price - b.price),
+  [items],
+);
+
+// ✅ Good - maintaining referential equality for deps
+const filterFn = useMemo(() => (item) => item.active, []);
+```
+
+### useCallback - For Memoized Children Only
+
+```tsx
+// ❌ Bad - useCallback without memoized child
+const handleClick = useCallback(() => doSomething(), []);
+return <button onClick={handleClick}>Click</button>;
+
+// ✅ Good - useCallback for memoized child
+const handleClick = useCallback(() => doSomething(id), [id]);
+return <MemoizedChild onClick={handleClick} />;
+```
+
+### Avoiding Re-renders
+
+```tsx
+// ❌ Bad - object literal creates new reference every render
+<Child style={{ color: 'red' }} />;
+
+// ✅ Good - stable reference
+const style = useMemo(() => ({ color: 'red' }), []);
+<Child style={style} />;
+
+// ✅ Better - define outside component if static
+const style = { color: 'red' };
+function Parent() {
+  return <Child style={style} />;
+}
+```
+
+## Async Patterns
+
+### Parallel Fetches
+
+```tsx
+// ❌ Bad - sequential (waterfall)
+const user = await getUser(id);
+const posts = await getPosts(id);
+const comments = await getComments(id);
+
+// ✅ Good - parallel with Promise.all
+const [user, posts, comments] = await Promise.all([
+  getUser(id),
+  getPosts(id),
+  getComments(id),
+]);
+```
+
+### useTransition for Non-Urgent Updates
+
+```tsx
+const [isPending, startTransition] = useTransition();
+
+const handleSearch = (query: string) => {
+  // Urgent: update input immediately
+  setQuery(query);
+
+  // Non-urgent: can be interrupted
+  startTransition(() => {
+    setFilteredResults(filterItems(query));
+  });
+};
+```
+
+### Lazy State Initialization
+
+```tsx
+// ❌ Bad - expensive function runs every render
+const [items, setItems] = useState(parseExpensiveData(raw));
+
+// ✅ Good - lazy initialization runs once
+const [items, setItems] = useState(() => parseExpensiveData(raw));
+```
+
+## Set/Map for O(1) Lookups
+
+```tsx
+// ❌ Bad - O(n) on every render
+const isSelected = (id: string) => selectedIds.includes(id);
+
+// ✅ Good - O(1) lookups with Set
+const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
+const isSelected = (id: string) => selectedSet.has(id);
+```
 
 ## Common Mistakes
 
-| Mistake                    | Fix                                 | Reference                                    |
-| -------------------------- | ----------------------------------- | -------------------------------------------- |
-| Derived state in useEffect | Calculate during render             | [anti-patterns.md](anti-patterns.md)         |
-| Effect chains (A→B→C)      | Derive all values directly          | [anti-patterns.md](anti-patterns.md)         |
-| useMemo for simple values  | Only memoize expensive computations | [performance.md](performance.md)             |
-| useCallback everywhere     | Only for memoized child components  | [performance.md](performance.md)             |
-| Object literals as props   | Define outside component or useMemo | [performance.md](performance.md)             |
-| Manual data fetching       | Use TanStack Query                  | [alternatives.md](alternatives.md)           |
-| Sequential awaits          | Use Promise.all for parallel ops    | [advanced-patterns.md](advanced-patterns.md) |
-| Array.includes in loops    | Use Set with useMemo for O(1)       | [advanced-patterns.md](advanced-patterns.md) |
-| useState(expensiveInit())  | Use useState(() => expensiveInit()) | [advanced-patterns.md](advanced-patterns.md) |
+| Mistake                    | Fix                                 |
+| -------------------------- | ----------------------------------- |
+| Derived state in useEffect | Calculate during render             |
+| Effect chains (A→B→C)      | Derive all values directly          |
+| useMemo for simple values  | Only memoize expensive computations |
+| useCallback everywhere     | Only for memoized child components  |
+| Object literals as props   | Define outside component or useMemo |
+| Manual data fetching       | Use TanStack Query                  |
+| Sequential awaits          | Use Promise.all for parallel ops    |
+| Array.includes in loops    | Use Set with useMemo for O(1)       |
+| useState(expensiveInit())  | Use useState(() => expensiveInit()) |
 
 ## Delegation
 
-| Task                      | Delegate To                                                |
-| ------------------------- | ---------------------------------------------------------- |
-| Data fetching & caching   | [tanstack-query](../tanstack-query/SKILL.md) skill         |
-| Form state                | [tanstack-form](../tanstack-form/SKILL.md) skill           |
-| URL state                 | [tanstack-router](../tanstack-router/SKILL.md) skill       |
-| Component design patterns | [component-patterns](../component-patterns/SKILL.md) skill |
-| Code review               | `code-reviewer` agent                                      |
+- **Data fetching**: For queries and caching, see [tanstack-query](../tanstack-query/SKILL.md) skill
+- **Form state**: For form handling, see [tanstack-form](../tanstack-form/SKILL.md) skill
+- **URL state**: For routing and params, see [tanstack-router](../tanstack-router/SKILL.md) skill
+- **Error handling**: For error boundaries, see [error-boundaries](../error-boundaries/SKILL.md) skill
+- **Full-stack flows**: For integrated patterns, see [integration-patterns](../integration-patterns/SKILL.md) skill
+- **Code review**: After optimizing components, delegate to `code-reviewer` agent

@@ -15,8 +15,8 @@ validators: {
   validators={{
     onChange: z.email(),
     onChangeAsyncDebounceMs: 500,
-    onChangeAsync: async (email) => {
-      const exists = await checkEmail(email);
+    onChangeAsync: async ({ value }) => {
+      const exists = await checkEmail(value);
       return !exists ? undefined : 'Email taken';
     },
   }}

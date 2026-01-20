@@ -33,7 +33,7 @@ export const auth = betterAuth({
     usePlural: true, // Uses 'users', 'sessions', etc.
   }),
   emailAndPassword: { enabled: true },
-  plugins: [tanstackStartCookies()],
+  plugins: [tanstackStartCookies()], // Must be last plugin in array
 });
 ```
 

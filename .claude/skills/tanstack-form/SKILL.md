@@ -187,7 +187,7 @@ form.handleSubmit(); // Submit programmatically
 | Missing `id` on inputs              | Use `id={field.name}` for label association         |
 | Missing `aria-invalid`              | Add for accessibility                               |
 | Using interface keyword             | Use `type` for form value types                     |
-| Not using Zod v4 syntax             | Use `z.email()` not `z.string().email()`            |
+| Using deprecated Zod syntax         | Use `z.email()` not `z.string().email()`            |
 | Server validation only              | Always validate client-side first                   |
 
 ## Delegation

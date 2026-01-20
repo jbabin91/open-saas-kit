@@ -200,10 +200,9 @@ function PostContent() {
 
 - **Error logging**: For monitoring, consider external services
 - **Code review**: After creating error components, delegate to `code-reviewer` agent
-- **Error patterns**: For server errors, see `error-handling` rule
 
-## References
+## Related Skills
 
-- Custom error classes: [reference.md](reference.md)
-- Error logging integration: [reference.md](reference.md)
-- Recovery patterns: [reference.md](reference.md)
+- Server error handling: [server-functions](../server-functions/SKILL.md) - Error codes, structured responses
+- Route loaders: [tanstack-router](../tanstack-router/SKILL.md) - Loader errors, notFound()
+- Integration flows: [integration-patterns](../integration-patterns/SKILL.md) - Full error handling patterns
