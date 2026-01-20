@@ -1,4 +1,7 @@
 import baseConfig from '@oakoss/eslint-config/base';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, globalIgnores } from 'eslint/config';
 
-export default defineConfig(...baseConfig);
+export default defineConfig(
+  globalIgnores(['apps/**', 'packages/**']),
+  ...baseConfig,
+);

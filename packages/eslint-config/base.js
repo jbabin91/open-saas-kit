@@ -49,6 +49,12 @@ export default defineConfig(
       globals: globals.browser,
     },
   },
+  {
+    linterOptions: {
+      reportUnusedDisableDirectives: true,
+      reportUnusedInlineConfigs: 'warn',
+    },
+  },
   turboPlugin.configs['flat/recommended'],
   {
     extends: [js.configs.recommended, unicorn.configs.recommended],
