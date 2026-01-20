@@ -15,34 +15,33 @@ import tseslint from 'typescript-eslint';
 export default defineConfig(
   globalIgnores([
     // Dependencies
-    'node_modules',
+    '**/node_modules',
 
     // Build outputs
-    'build',
-    'dist',
-    'out',
+    '**/build',
+    '**/dist',
+    '**/out',
 
     // Framework - TanStack/Vinxi/Nitro
-    '.nitro',
-    '.output',
-    '.tanstack',
-    '.vinxi',
-    '.wrangler',
+    '**/.nitro',
+    '**/.output',
+    '**/.tanstack',
+    '**/.vinxi',
+    '**/.wrangler',
 
     // Framework - Turbo
-    '.turbo',
+    '**/.turbo',
 
     // Testing
-    'coverage',
-    'playwright-report',
-    'test-results',
+    '**/coverage',
+    '**/playwright-report',
+    '**/test-results',
 
     // Storybook
-    'storybook-static',
+    '**/storybook-static',
 
     // Generated files
     '**/*.gen.ts',
-    '**/drizzle.config.ts',
   ]),
   {
     languageOptions: {

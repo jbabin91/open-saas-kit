@@ -57,7 +57,7 @@ open-saas-kit/
 pnpm dev          # Start development server
 pnpm build        # Build all packages
 pnpm lint         # Lint all packages
-pnpm check-types  # Type check all packages
+pnpm typecheck    # Type check all packages
 pnpm db:push      # Push schema to database
 pnpm db:generate  # Generate migrations
 pnpm db:migrate   # Run migrations

@@ -1,0 +1,10 @@
+{
+  "extends": "@oakoss/typescript-config/base.json",
+  "compilerOptions": {
+    "composite": true,
+    "emitDeclarationOnly": true,
+    "outDir": "node_modules/.cache/typescript/lint",
+    "tsBuildInfoFile": "node_modules/.cache/typescript/lint/.tsbuildinfo"
+  },
+  "include": ["drizzle.config.ts"]
+}

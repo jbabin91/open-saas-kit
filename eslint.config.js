@@ -1,4 +1,4 @@
 import baseConfig from '@oakoss/eslint-config/base';
 import { defineConfig } from 'eslint/config';
 
-export default defineConfig(...baseConfig, {});
+export default defineConfig(...baseConfig);

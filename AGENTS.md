@@ -1,99 +1,180 @@
 # Agent Instructions
 
-This file provides guidance to AI agents when working with code in this repository.
+Guidance for AI agents working in this TanStack Start + Turborepo monorepo.
 
 ## Commands
 
 ```bash
 # Development
-pnpm dev              # Start all packages in dev mode
-pnpm build            # Build all packages
-pnpm lint             # Lint all packages
-pnpm check-types      # Type check all packages
+pnpm dev                    # Start all packages in dev mode
+pnpm build                  # Build all packages
+pnpm lint                   # Lint all packages
+pnpm lint:fix               # Lint and auto-fix
+pnpm typecheck              # Type check all packages
+pnpm format                 # Format with Prettier
+pnpm format:check           # Check formatting
 
-# Database (runs in @oakoss/database package)
-pnpm db:push          # Push schema to database (dev workflow)
-pnpm db:generate      # Generate migrations
-pnpm db:migrate       # Run migrations (production workflow)
+# Testing
+pnpm test                   # Run all tests
+pnpm --filter web test      # Run tests in web app only
+pnpm --filter web exec vitest run src/path/to/file.test.tsx  # Single test file
+pnpm --filter web exec vitest run -t "test name"             # Single test by name
 
-# Start PostgreSQL
-docker-compose up -d
+# Database (in @oakoss/database)
+pnpm db:push                # Push schema to database (dev)
+pnpm db:generate            # Generate migrations
+pnpm db:migrate             # Run migrations (production)
+
+# Infrastructure
+docker-compose up -d        # Start PostgreSQL
 ```
 
 ## Architecture
 
-### Monorepo Structure (Turborepo + pnpm)
+```sh
+apps/web/                   # TanStack Start app (SSR React)
+packages/
+├── auth/                   # Better Auth (server/client split)
+├── config/                 # Zod-validated env vars
+├── database/               # Drizzle ORM + PostgreSQL
+├── eslint-config/          # Shared ESLint config
+├── typescript-config/      # Shared TypeScript config
+└── ui/                     # React Aria Components
+```
 
-**Apps:**
+## Code Style
 
-- `apps/web` - TanStack Start application (SSR React framework)
+### File Naming
 
-**Packages:**
+- **kebab-case** for all files: `user-profile.tsx`, `get-posts.ts`
+- Exception: Route params use `$`: `$id.tsx`, `$slug.tsx`
+- Test files: `*.test.ts` or `*.test.tsx`
 
-- `@oakoss/auth` - Better Auth configuration with server/client split
-- `@oakoss/database` - Drizzle ORM schemas and PostgreSQL client
-- `@oakoss/config` - Zod-validated environment variables
-- `@oakoss/ui` - React Aria Components with Tailwind styling
-- `@oakoss/eslint-config` - Shared ESLint configurations
-- `@oakoss/typescript-config` - Shared TypeScript configurations
+### Imports
 
-### Authentication Flow
+```tsx
+// 1. Sort imports automatically (enforced by eslint)
+// 2. Use inline type imports
+import { type User, getUser } from '@oakoss/database';
 
-Server (`@oakoss/auth/server`):
+// 3. No relative parent imports - use aliases
+import { Button } from '@/components/button'; // ✓
+import { Button } from '../../../button'; // ✗
 
-- Better Auth instance with Drizzle adapter
-- Handles OAuth providers (GitHub, Google) and email/password
-- Exports `auth` for API route handlers
+// 4. Workspace packages
+import { db } from '@oakoss/database';
+import { auth } from '@oakoss/auth/server';
+import { env } from '@oakoss/config';
+```
 
-Client (`@oakoss/auth/client`):
+### TypeScript
 
-- React hooks: `useSession`, `signIn`, `signOut`, `signUp`
-- `getSession()` for server-side session checks
+```tsx
+// Use `type` not `interface`
+type User = { id: string; name: string }; // ✓
+interface User {
+  id: string;
+  name: string;
+} // ✗
 
-API endpoint at `/api/auth/$` catches all auth requests.
+// Prefix unused vars with underscore
+function handler(_req: Request) {}
 
-### Routing (TanStack Start)
+// Use strict equality
+if (value === null) {
+} // ✓
+if (value == null) {
+} // ✗
 
-- File-based routing in `apps/web/src/routes/`
-- `__root.tsx` - Root layout with nav
-- `_authed.tsx` - Protected route layout (redirects to login if no session)
-- Routes under `_authed/` require authentication
+// Infer types from Drizzle schemas
+type User = typeof users.$inferSelect;
+type NewUser = typeof users.$inferInsert;
+```
 
-### UI Components
+### Object Keys
 
-Built on React Aria Components with:
+Sort object keys alphabetically (3+ keys):
 
-- Variant/size props pattern
-- `cn()` utility for class merging (clsx + tailwind-merge)
-- Tailwind CSS v4 for styling
+```tsx
+// ✓ Correct
+const config = { a: 1, b: 2, c: 3 };
 
-### Database Schema
+// ✗ Wrong
+const config = { c: 3, a: 1, b: 2 };
+```
 
-Schema files in `packages/database/src/schema/`:
+### React Components
 
-- Better Auth tables: `users`, `sessions`, `accounts`, `verifications`
-- Use `$inferSelect` / `$inferInsert` for types
+```tsx
+// Function components with explicit return types optional
+export function Button({ variant = 'primary', ...props }: ButtonProps) {
+  return (
+    <AriaButton className={cn(baseStyles, variants[variant])} {...props} />
+  );
+}
+
+// Props types use intersection, not extension
+type ButtonProps = { variant?: 'primary' | 'secondary' } & AriaButtonProps;
+```
+
+### Server Functions
+
+```tsx
+import { createServerFn } from '@tanstack/react-start';
+import { z } from 'zod';
+
+// Use z.email() not z.string().email() (Zod v4)
+const createUser = createServerFn({ method: 'POST' })
+  .inputValidator(z.object({ name: z.string().min(1), email: z.email() }))
+  .handler(async ({ data, request }) => {
+    const session = await auth.api.getSession({ headers: request.headers });
+    if (!session) {
+      return { error: 'Unauthorized', code: 'AUTH_REQUIRED' };
+    }
+    // Return structured results, don't throw
+    return { data: user };
+  });
+```
+
+### Error Handling
+
+- Return `{ error: string, code: string }` from server functions
+- Use error boundaries for React component errors
+- Standard codes: `AUTH_REQUIRED`, `FORBIDDEN`, `NOT_FOUND`, `VALIDATION_ERROR`
+
+### Testing
+
+```tsx
+import { render, screen } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
+
+describe('Component', () => {
+  it('should render correctly', () => {
+    render(<Component />);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+});
+```
 
 ## Key Patterns
 
-- Import workspace packages: `import { db } from "@oakoss/database"`
-- Environment validation: `import { env } from "@oakoss/config"`
-- Protected routes: Place under `_authed/` directory
-- UI components: Extend React Aria components with variant props
+- **Protected routes**: Place under `_app/` directory
+- **Auth check**: `auth.api.getSession({ headers: request.headers })`
+- **Class merging**: Use `cn()` from `@oakoss/ui` (clsx + tailwind-merge)
+- **Console logs**: Allowed only in `env.ts`, `logger.ts`, `seed/`, tests
 
-## Beads workflow
+## Commit Messages
 
-This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
+Follow [Conventional Commits](https://www.conventionalcommits.org/):
 
-### Quick Reference
-
-```bash
-bd ready              # Find available work
-bd show <id>          # View issue details
-bd update <id> --status in_progress  # Claim work
-bd close <id>         # Complete work
-bd sync               # Sync with git
+```text
+feat(auth): add OAuth provider support
+fix(database): resolve connection pooling issue
+docs: update API documentation
+chore: upgrade dependencies
 ```
+
+## Session Workflow
 
 ### Landing the Plane (Session Completion)
 
@@ -108,7 +189,6 @@ bd sync               # Sync with git
 
    ```bash
    git pull --rebase
-   bd sync
    git push
    git status  # MUST show "up to date with origin"
    ```
