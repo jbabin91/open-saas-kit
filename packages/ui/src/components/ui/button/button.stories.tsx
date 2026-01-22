@@ -1,5 +1,6 @@
 import { RiAddLine, RiArrowRightLine } from '@remixicon/react';
 import { type Meta, type StoryObj } from '@storybook/react-vite';
+import { expect, fn, userEvent } from 'storybook/test';
 
 import { Button } from './button';
 
@@ -160,4 +161,58 @@ export const AllSizes: Story = {
       <Button size="lg">Large</Button>
     </div>
   ),
+};
+
+export const ClickInteraction: Story = {
+  args: {
+    children: 'Click me',
+    onPress: fn(),
+  },
+  play: async ({ args, canvas }) => {
+    const button = canvas.getByRole('button');
+    await userEvent.click(button);
+    await expect(args.onPress).toHaveBeenCalledTimes(1);
+  },
+};
+
+export const DisabledInteraction: Story = {
+  args: {
+    children: 'Disabled',
+    isDisabled: true,
+    onPress: fn(),
+  },
+  play: async ({ args, canvas }) => {
+    const button = canvas.getByRole('button');
+    await expect(button).toBeDisabled();
+    await expect(args.onPress).not.toHaveBeenCalled();
+  },
+};
+
+export const KeyboardInteraction: Story = {
+  args: {
+    children: 'Press Enter',
+    onPress: fn(),
+  },
+  play: async ({ args, canvas }) => {
+    const button = canvas.getByRole('button');
+    await userEvent.tab();
+    await expect(button).toHaveFocus();
+    await userEvent.keyboard('{Enter}');
+    await expect(args.onPress).toHaveBeenCalledTimes(1);
+    await userEvent.keyboard(' ');
+    await expect(args.onPress).toHaveBeenCalledTimes(2);
+  },
+};
+
+export const IconOnlyAccessibility: Story = {
+  args: {
+    'aria-label': 'Add new item',
+    children: <RiAddLine data-slot="icon" />,
+    size: 'icon',
+  },
+  play: async ({ canvas }) => {
+    const button = canvas.getByRole('button', { name: 'Add new item' });
+    await expect(button).toBeInTheDocument();
+    await expect(button).toHaveAccessibleName('Add new item');
+  },
 };
