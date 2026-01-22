@@ -7,11 +7,13 @@
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)"
   ],
+  "assignees": ["jbabin91"],
+  "automerge": true,
   "labels": ["dependencies"],
   "platformAutomerge": true,
-  "rangeStrategy": "bump",
-  "prHourlyLimit": 4,
   "prConcurrentLimit": 10,
+  "prHourlyLimit": 4,
+  "rangeStrategy": "bump",
   "schedule": ["before 6am on the first day of the month"],
   "timezone": "America/Chicago",
   "ignorePaths": ["**/node_modules/**"],
@@ -22,14 +24,17 @@
       "rangeStrategy": "widen"
     },
     {
+      "description": "GitHub Actions",
+      "groupName": "GitHub Actions",
+      "matchManagers": ["github-actions"]
+    },
+    {
       "description": "TanStack ecosystem",
       "groupName": "TanStack",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
       "matchPackageNames": ["/^@tanstack//"]
     },
     {
-      "description": "React ecosystem",
+      "description": "React ecosystem (manual review)",
       "groupName": "React",
       "matchPackageNames": [
         "react",
@@ -37,125 +42,74 @@
         "@types/react",
         "@types/react-dom"
       ],
-      "matchUpdateTypes": ["minor", "patch"]
+      "automerge": false
     },
     {
       "description": "React Aria Components",
       "groupName": "React Aria",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
       "matchPackageNames": ["/^react-aria/", "/^@react-aria//"]
     },
     {
       "description": "Tailwind CSS ecosystem",
       "groupName": "Tailwind CSS",
-      "matchUpdateTypes": ["minor", "patch"],
       "matchPackageNames": ["/^tailwind/", "/^@tailwindcss//"]
     },
     {
       "description": "Storybook ecosystem",
       "groupName": "Storybook",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": [
-        "/^@storybook//",
-        "/^storybook/",
-        "/^@chromatic-com//"
-      ]
+      "matchPackageNames": ["/^@storybook//", "/^storybook/", "/^@chromatic-com//"]
     },
     {
       "description": "Testing libraries",
       "groupName": "Testing",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
       "matchPackageNames": ["/^vitest/", "/^@vitest//", "/^@testing-library//"]
     },
     {
       "description": "ESLint ecosystem",
       "groupName": "ESLint",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": [
-        "/^eslint/",
-        "/^@eslint//",
-        "/^@typescript-eslint//"
-      ]
+      "matchPackageNames": ["/^eslint/", "/^@eslint//", "/^@typescript-eslint//"]
     },
     {
       "description": "Commitlint ecosystem",
       "groupName": "Commitlint",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
       "matchPackageNames": ["/^@commitlint//"]
     },
     {
       "description": "Vite ecosystem",
       "groupName": "Vite",
-      "matchUpdateTypes": ["minor", "patch"],
       "matchPackageNames": ["/^vite/", "/^@vitejs//"]
     },
     {
       "description": "Node.js types",
       "groupName": "Node Types",
-      "matchPackageNames": ["@types/node"],
-      "matchUpdateTypes": ["major", "minor", "patch"],
-      "automerge": true
-    },
-    {
-      "description": "TypeScript",
-      "matchPackageNames": ["typescript"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
+      "matchPackageNames": ["@types/node"]
     },
     {
       "description": "Prettier and plugins",
       "groupName": "Prettier",
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true,
       "matchPackageNames": ["/^prettier/"]
     },
     {
-      "description": "Drizzle ORM ecosystem",
+      "description": "Drizzle ORM ecosystem (manual review)",
       "groupName": "Drizzle",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": ["/^drizzle-/"]
+      "matchPackageNames": ["/^drizzle-/"],
+      "automerge": false
     },
     {
-      "description": "Better Auth",
+      "description": "Better Auth (manual review)",
       "groupName": "Better Auth",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchPackageNames": ["/^better-auth/"]
+      "matchPackageNames": ["/^better-auth/"],
+      "automerge": false
     },
     {
-      "description": "Zod",
-      "matchPackageNames": ["zod"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
-    {
-      "description": "Turbo",
-      "matchPackageNames": ["turbo"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
-    {
-      "description": "Lefthook",
-      "matchPackageNames": ["lefthook"],
-      "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
-    },
-    {
-      "description": "Pin nitro nightly",
+      "description": "Disable nitro nightly",
       "matchPackageNames": ["nitro"],
       "enabled": false
     },
     {
-      "description": "Disable major updates automerge",
+      "description": "Major updates require manual review",
       "matchUpdateTypes": ["major"],
       "automerge": false
-    },
-    {
-      "description": "Lockfile maintenance",
-      "matchUpdateTypes": ["lockFileMaintenance"],
-      "automerge": true
     }
   ],
   "lockFileMaintenance": {
