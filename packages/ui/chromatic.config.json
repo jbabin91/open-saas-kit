@@ -3,7 +3,7 @@
   "exitOnceUploaded": true,
   "onlyChanged": true,
   "projectId": "Project:69717e71663ffdad62a7604a",
-  "skip": "chore/deps-**",
+  "skip": "@(chore/deps-**|dependabot/**)",
   "storybookBaseDir": "packages/ui",
   "zip": true
 }
