@@ -24,9 +24,9 @@
     {
       "description": "TanStack ecosystem",
       "groupName": "TanStack",
-      "matchPackagePatterns": ["^@tanstack/"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["/^@tanstack//"]
     },
     {
       "description": "React ecosystem",
@@ -42,51 +42,55 @@
     {
       "description": "React Aria Components",
       "groupName": "React Aria",
-      "matchPackagePatterns": ["^react-aria", "^@react-aria/"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["/^react-aria/", "/^@react-aria//"]
     },
     {
       "description": "Tailwind CSS ecosystem",
       "groupName": "Tailwind CSS",
-      "matchPackagePatterns": ["^tailwind", "^@tailwindcss/"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["/^tailwind/", "/^@tailwindcss//"]
     },
     {
       "description": "Storybook ecosystem",
       "groupName": "Storybook",
-      "matchPackagePatterns": [
-        "^@storybook/",
-        "^storybook",
-        "^@chromatic-com/"
-      ],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": [
+        "/^@storybook//",
+        "/^storybook/",
+        "/^@chromatic-com//"
+      ]
     },
     {
       "description": "Testing libraries",
       "groupName": "Testing",
-      "matchPackagePatterns": ["^vitest", "^@vitest/", "^@testing-library/"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["/^vitest/", "/^@vitest//", "/^@testing-library//"]
     },
     {
       "description": "ESLint ecosystem",
       "groupName": "ESLint",
-      "matchPackagePatterns": ["^eslint", "^@eslint/", "^@typescript-eslint/"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": [
+        "/^eslint/",
+        "/^@eslint//",
+        "/^@typescript-eslint//"
+      ]
     },
     {
       "description": "Commitlint ecosystem",
       "groupName": "Commitlint",
-      "matchPackagePatterns": ["^@commitlint/"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["/^@commitlint//"]
     },
     {
       "description": "Vite ecosystem",
       "groupName": "Vite",
-      "matchPackagePatterns": ["^vite", "^@vitejs/"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["/^vite/", "/^@vitejs//"]
     },
     {
       "description": "Node.js types",
@@ -104,21 +108,21 @@
     {
       "description": "Prettier and plugins",
       "groupName": "Prettier",
-      "matchPackagePatterns": ["^prettier"],
       "matchUpdateTypes": ["minor", "patch"],
-      "automerge": true
+      "automerge": true,
+      "matchPackageNames": ["/^prettier/"]
     },
     {
       "description": "Drizzle ORM ecosystem",
       "groupName": "Drizzle",
-      "matchPackagePatterns": ["^drizzle-"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["/^drizzle-/"]
     },
     {
       "description": "Better Auth",
       "groupName": "Better Auth",
-      "matchPackagePatterns": ["^better-auth"],
-      "matchUpdateTypes": ["minor", "patch"]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["/^better-auth/"]
     },
     {
       "description": "Zod",
