@@ -81,6 +81,7 @@
       "interruptible": true
     },
     "typecheck": {
+      "dependsOn": ["^build"],
       "inputs": [
         "$TURBO_DEFAULT$",
         "**/*.{ts,tsx}",

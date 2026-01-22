@@ -31,9 +31,6 @@ out
 # TypeScript
 *.tsbuildinfo
 
-# Generated
-routeTree.gen.ts
-
 # Testing
 coverage
 
