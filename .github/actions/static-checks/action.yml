@@ -1,0 +1,17 @@
+name: Static Checks
+description: Run format check, lint, and typecheck
+
+runs:
+  using: composite
+  steps:
+    - name: Check formatting
+      shell: bash
+      run: pnpm format:check
+
+    - name: Lint
+      shell: bash
+      run: pnpm lint
+
+    - name: Typecheck
+      shell: bash
+      run: pnpm typecheck
