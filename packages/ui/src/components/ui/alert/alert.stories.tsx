@@ -29,11 +29,6 @@ export const Default: Story = {
 };
 
 export const Destructive: Story = {
-  parameters: {
-    a11y: {
-      test: 'todo',
-    },
-  },
   render: () => (
     <Alert className="max-w-md" variant="destructive">
       <RiErrorWarningLine />
