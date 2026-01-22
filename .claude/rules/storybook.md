@@ -261,3 +261,90 @@ The `eslint-plugin-storybook` enforces:
 - Meta must include `component` or `title`
 - No redundant `render` when `args` suffices
 - Proper TypeScript types for stories
+
+## Chromatic Parameters
+
+Story-level Chromatic configuration:
+
+```tsx
+export const AnimatedComponent: Story = {
+  parameters: {
+    chromatic: {
+      // Wait before capturing (for JS animations)
+      delay: 300,
+
+      // Disable snapshot for this story
+      disableSnapshot: true,
+
+      // Pause CSS animations at end state
+      pauseAnimationAtEnd: true,
+
+      // Diff sensitivity (0-1, lower = more sensitive)
+      diffThreshold: 0.2,
+    },
+  },
+};
+```
+
+### Viewports
+
+Configure responsive snapshots:
+
+```tsx
+// Meta level - applies to all stories
+const meta = {
+  parameters: {
+    chromatic: {
+      viewports: [320, 768, 1200],
+    },
+  },
+} satisfies Meta<typeof Component>;
+
+// Story level - override for specific story
+export const MobileOnly: Story = {
+  parameters: {
+    chromatic: { viewports: [320] },
+  },
+};
+```
+
+### Ignoring Elements
+
+Exclude dynamic content from visual diffs:
+
+```tsx
+// Class-based
+<div className="chromatic-ignore">
+  <Clock />
+</div>
+
+// Data attribute
+<video data-chromatic="ignore" src="video.mp4" />
+
+// CSS selector (in parameters)
+parameters: {
+  chromatic: {
+    ignoreSelectors: ['.timestamp', '.random-avatar'],
+  },
+}
+```
+
+Note: Dimension changes still trigger diffs even on ignored elements.
+
+## Waiting for Async Content
+
+Use assertions instead of fixed delays when possible:
+
+```tsx
+export const AsyncContent: Story = {
+  play: async ({ canvas }) => {
+    // Wait for loading to complete
+    await expect(
+      await canvas.findByRole('button', { name: 'Submit' }),
+    ).toBeVisible();
+    // Snapshot captures after play() completes
+  },
+};
+```
+
+Use `findBy*` queries (with built-in waiting) for async elements.
