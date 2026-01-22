@@ -1,6 +1,9 @@
 {
+  "autoAcceptChanges": "main",
+  "exitOnceUploaded": true,
   "onlyChanged": true,
   "projectId": "Project:69717e71663ffdad62a7604a",
+  "skip": "chore/deps-**",
   "storybookBaseDir": "packages/ui",
   "zip": true
 }
