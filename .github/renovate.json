@@ -1,0 +1,159 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "helpers:pinGitHubActionDigests",
+    ":maintainLockFilesWeekly",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "labels": ["dependencies"],
+  "rangeStrategy": "bump",
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 10,
+  "schedule": ["before 6am on monday"],
+  "timezone": "America/Chicago",
+  "ignorePaths": ["**/node_modules/**"],
+  "packageRules": [
+    {
+      "description": "TanStack ecosystem",
+      "groupName": "TanStack",
+      "matchPackagePatterns": ["^@tanstack/"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "React ecosystem",
+      "groupName": "React",
+      "matchPackageNames": [
+        "react",
+        "react-dom",
+        "@types/react",
+        "@types/react-dom"
+      ],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "React Aria Components",
+      "groupName": "React Aria",
+      "matchPackagePatterns": ["^react-aria", "^@react-aria/"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Tailwind CSS ecosystem",
+      "groupName": "Tailwind CSS",
+      "matchPackagePatterns": ["^tailwind", "^@tailwindcss/"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "Storybook ecosystem",
+      "groupName": "Storybook",
+      "matchPackagePatterns": [
+        "^@storybook/",
+        "^storybook",
+        "^@chromatic-com/"
+      ],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "Testing libraries",
+      "groupName": "Testing",
+      "matchPackagePatterns": ["^vitest", "^@vitest/", "^@testing-library/"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "ESLint ecosystem",
+      "groupName": "ESLint",
+      "matchPackagePatterns": ["^eslint", "^@eslint/", "^@typescript-eslint/"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "Commitlint ecosystem",
+      "groupName": "Commitlint",
+      "matchPackagePatterns": ["^@commitlint/"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Vite ecosystem",
+      "groupName": "Vite",
+      "matchPackagePatterns": ["^vite", "^@vitejs/"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "Node.js types",
+      "groupName": "Node Types",
+      "matchPackageNames": ["@types/node"],
+      "matchUpdateTypes": ["major", "minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "TypeScript",
+      "matchPackageNames": ["typescript"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Prettier and plugins",
+      "groupName": "Prettier",
+      "matchPackagePatterns": ["^prettier"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Drizzle ORM ecosystem",
+      "groupName": "Drizzle",
+      "matchPackagePatterns": ["^drizzle-"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "Better Auth",
+      "groupName": "Better Auth",
+      "matchPackagePatterns": ["^better-auth"],
+      "matchUpdateTypes": ["minor", "patch"]
+    },
+    {
+      "description": "Zod",
+      "matchPackageNames": ["zod"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Turbo",
+      "matchPackageNames": ["turbo"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Lefthook",
+      "matchPackageNames": ["lefthook"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "automerge": true
+    },
+    {
+      "description": "Pin nitro nightly",
+      "matchPackageNames": ["nitro"],
+      "enabled": false
+    },
+    {
+      "description": "Disable major updates automerge",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    },
+    {
+      "description": "Lockfile maintenance",
+      "matchUpdateTypes": ["lockFileMaintenance"],
+      "automerge": true
+    }
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 6am on the first day of the month"]
+  },
+  "vulnerabilityAlerts": {
+    "labels": ["security"],
+    "schedule": ["at any time"]
+  }
+}
