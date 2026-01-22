@@ -16,6 +16,11 @@
   "ignorePaths": ["**/node_modules/**"],
   "packageRules": [
     {
+      "description": "Widen peer dependency ranges",
+      "matchDepTypes": ["peerDependencies"],
+      "rangeStrategy": "widen"
+    },
+    {
       "description": "TanStack ecosystem",
       "groupName": "TanStack",
       "matchPackagePatterns": ["^@tanstack/"],
