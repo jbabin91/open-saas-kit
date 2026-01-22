@@ -4,6 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "turbo run build",
+    "build-storybook": "turbo run build-storybook --filter=@oakoss/ui",
     "clean": "turbo run clean && rm -rf node_modules .turbo",
     "db:generate": "turbo run db:generate --filter=@oakoss/database",
     "db:migrate": "turbo run db:migrate --filter=@oakoss/database",
@@ -20,6 +21,7 @@
     "lint:root": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:ws": "sherif",
     "start": "turbo run start",
+    "storybook": "turbo run storybook --filter=@oakoss/ui",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },

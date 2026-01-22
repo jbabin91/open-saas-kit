@@ -82,6 +82,15 @@
     },
     "clean": {
       "cache": false
+    },
+    "storybook": {
+      "cache": false,
+      "persistent": true,
+      "interruptible": true
+    },
+    "build-storybook": {
+      "dependsOn": ["^build"],
+      "outputs": ["storybook-static/**"]
     }
   }
 }
