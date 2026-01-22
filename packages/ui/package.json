@@ -22,7 +22,9 @@
     "lint": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:fix": "eslint . --fix --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "storybook": "storybook dev -p 6006",
-    "test": "vitest",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:watch": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
