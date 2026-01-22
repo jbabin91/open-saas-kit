@@ -43,14 +43,14 @@ jobs:
         uses: ./.github/actions/test
 
       - name: Upload UI coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
         with:
           directory: ./packages/ui/coverage
           flags: ui
           fail_ci_if_error: false
 
       - name: Upload Web coverage to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5
         with:
           directory: ./apps/web/coverage
           flags: web
