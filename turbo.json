@@ -58,6 +58,7 @@
         "**/*.{ts,tsx}",
         "**/*.test.{ts,tsx}",
         "**/*.spec.{ts,tsx}",
+        "**/*.stories.{ts,tsx}",
         "vitest.config.*",
         "!**/node_modules/**"
       ]

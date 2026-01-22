@@ -1,0 +1,16 @@
+/* Font must be imported before theme for proper loading */
+@import '@fontsource-variable/inter';
+
+/* Import the UI package theme (includes Tailwind) */
+@import '../src/styles/theme.css';
+
+/* Storybook-specific styles */
+body {
+  font-family: 'Inter Variable', sans-serif;
+}
+
+/* Ensure the preview background uses our theme colors */
+.sb-show-main {
+  background: var(--background);
+  color: var(--foreground);
+}
