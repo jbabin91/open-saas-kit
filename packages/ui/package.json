@@ -53,6 +53,7 @@
     "@oakoss/typescript-config": "workspace:^",
     "@storybook/addon-a11y": "^10.2.0",
     "@storybook/addon-docs": "^10.2.0",
+    "@storybook/addon-themes": "^10.2.0",
     "@storybook/addon-vitest": "^10.2.0",
     "@storybook/react-vite": "^10.2.0",
     "@tailwindcss/vite": "^4.1.18",

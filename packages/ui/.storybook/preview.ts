@@ -1,10 +1,22 @@
 import type { Preview } from '@storybook/react-vite';
 
+import { withThemeByClassName } from '@storybook/addon-themes';
 import { themes } from 'storybook/theming';
 
+import { allModes } from './modes';
 import './preview.css';
 
 const preview: Preview = {
+  decorators: [
+    withThemeByClassName({
+      defaultTheme: 'light',
+      parentSelector: 'html',
+      themes: {
+        dark: 'dark',
+        light: 'light',
+      },
+    }),
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -31,6 +43,12 @@ const preview: Preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: 'todo',
+    },
+    chromatic: {
+      modes: {
+        dark: allModes.dark,
+        light: allModes.light,
+      },
     },
   },
 };
