@@ -26,6 +26,7 @@ jobs:
 
   test:
     name: Test
+    needs: static-checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,6 +40,7 @@ jobs:
 
   build:
     name: Build
+    needs: static-checks
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
