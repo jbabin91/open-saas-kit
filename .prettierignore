@@ -21,6 +21,9 @@ out
 # Framework - Turbo
 .turbo
 
+# Issue tracking
+.beads
+
 # Testing
 coverage
 
