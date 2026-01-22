@@ -1,0 +1,24 @@
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+comment:
+  layout: 'header, diff, flags, components'
+  behavior: default
+  require_changes: true
+
+flag_management:
+  individual_flags:
+    - name: ui
+      paths:
+        - packages/ui/src/**
+      carryforward: true
+    - name: web
+      paths:
+        - apps/web/src/**
+      carryforward: true

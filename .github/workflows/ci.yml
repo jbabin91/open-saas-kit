@@ -38,6 +38,13 @@ jobs:
       - name: Run tests
         uses: ./.github/actions/test
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          directory: ./packages/ui/coverage
+          flags: ui
+          fail_ci_if_error: false
+
   build:
     name: Build
     needs: static-checks
