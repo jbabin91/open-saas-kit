@@ -41,7 +41,7 @@ jobs:
           exitZeroOnChanges: true
           onlyChanged: true
           autoAcceptChanges: main
-          skip: chore/deps-**
+          skip: '@(chore/deps-**|dependabot/**)'
         env:
           CHROMATIC_BRANCH: ${{ github.head_ref || github.ref_name }}
           CHROMATIC_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
