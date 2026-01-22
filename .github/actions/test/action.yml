@@ -1,11 +1,5 @@
 name: Test
-description: Run tests with optional coverage
-
-inputs:
-  coverage:
-    description: Run tests with coverage
-    required: false
-    default: 'false'
+description: Run tests with coverage reporting
 
 runs:
   using: composite
@@ -14,12 +8,6 @@ runs:
       shell: bash
       run: pnpm exec playwright install chromium --with-deps
 
-    - name: Run tests
-      if: inputs.coverage == 'false'
-      shell: bash
-      run: pnpm test
-
     - name: Run tests with coverage
-      if: inputs.coverage == 'true'
       shell: bash
       run: pnpm test:coverage
