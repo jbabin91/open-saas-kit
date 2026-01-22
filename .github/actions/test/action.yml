@@ -5,7 +5,7 @@ inputs:
   coverage:
     description: Run tests with coverage
     required: false
-    default: "false"
+    default: 'false'
 
 runs:
   using: composite

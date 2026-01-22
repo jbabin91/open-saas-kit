@@ -18,7 +18,7 @@ pre-commit:
       run: pnpm markdownlint-cli2 --fix {staged_files}
       stage_fixed: true # Auto-stage Markdown fixes!
     format:
-      glob: '*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx}'
+      glob: '*.{ts,tsx,js,jsx,cjs,mjs,json,md,mdx,yml,yaml}'
       run: pnpm prettier -uwl {staged_files}
       stage_fixed: true # Auto-stage Prettier fixes!
 
