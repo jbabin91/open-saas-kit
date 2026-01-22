@@ -26,7 +26,7 @@ Max 0 ESLint warnings enforced.
 
 - `node_modules`, `dist`, `build`, `out`
 - `.nitro`, `.output`, `.tanstack`, `.vinxi`, `.wrangler`
-- `.turbo`
+- `.turbo`, `.beads`
 - `coverage`, `playwright-report`, `test-results`, `storybook-static`
 - `**/*.gen.ts` - Generated files
 - `**/drizzle.config.ts` - Drizzle config

@@ -40,6 +40,9 @@ export default defineConfig(
     // Storybook
     '**/storybook-static',
 
+    // Issue tracking
+    '**/.beads',
+
     // Generated files
     '**/*.gen.ts',
   ]),
