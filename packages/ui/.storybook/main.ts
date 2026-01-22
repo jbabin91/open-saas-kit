@@ -18,6 +18,8 @@ const config: StorybookConfig = {
     getAbsolutePath('@storybook/addon-a11y'),
     getAbsolutePath('@chromatic-com/storybook'),
     getAbsolutePath('@storybook/addon-vitest'),
+    getAbsolutePath('@vueless/storybook-dark-mode'),
+    getAbsolutePath('storybook-addon-deep-controls'),
   ],
   framework: {
     name: getAbsolutePath('@storybook/react-vite'),

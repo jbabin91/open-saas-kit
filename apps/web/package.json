@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "vite build",
-    "clean": "rm -rf .output .vinxi .nitro .tanstack node_modules src/routeTree.gen.ts",
+    "clean": "rm -rf .output .vinxi .nitro .tanstack node_modules coverage src/routeTree.gen.ts",
     "dev": "vite dev --port 3000",
     "lint": "eslint . --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",
     "lint:fix": "eslint . --fix --max-warnings 0 --cache --cache-location node_modules/.cache/eslint/.eslintcache",

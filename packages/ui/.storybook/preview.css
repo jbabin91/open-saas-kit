@@ -10,7 +10,8 @@ body {
 }
 
 /* Ensure the preview background uses our theme colors */
-.sb-show-main {
+.sb-show-main,
+.docs-story {
   background: var(--background);
   color: var(--foreground);
 }
