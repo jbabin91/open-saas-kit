@@ -7,8 +7,8 @@
     ":semanticCommits",
     ":semanticCommitTypeAll(chore)"
   ],
-  "assignees": ["jbabin91"],
   "automerge": true,
+  "branchPrefix": "chore/deps-",
   "labels": ["dependencies"],
   "platformAutomerge": true,
   "prConcurrentLimit": 10,
