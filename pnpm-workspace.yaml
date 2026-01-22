@@ -8,3 +8,8 @@ onlyBuiltDependencies:
   - msw
   - sharp
   - unrs-resolver
+
+overrides:
+  esbuild@<=0.24.2: '>=0.25.0'
+  seroval@<1.4.1: '>=1.4.1'
+  seroval@<=1.4.0: '>=1.4.1'
