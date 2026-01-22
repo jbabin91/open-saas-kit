@@ -36,7 +36,7 @@ const preview: Preview = {
       theme: themes.dark,
     },
     backgrounds: {
-      disable: true,
+      disabled: true,
     },
     themes: {
       disable: true,
