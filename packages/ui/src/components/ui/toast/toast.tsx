@@ -107,8 +107,8 @@ const toastDescriptionVariants = tv({
 
 const toastCloseVariants = tv({
   base: [
-    'absolute right-2 top-2 rounded-md p-1 transition-colors',
-    'data-[hovered]:bg-black/5 dark:data-[hovered]:bg-white/10',
+    'absolute right-4 top-4 flex size-5 items-center justify-center rounded-sm transition-colors',
+    'bg-black/5 data-[hovered]:bg-black/10 dark:bg-white/10 dark:data-[hovered]:bg-white/15',
     'data-[focus-visible]:outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring',
   ],
   variants: {
