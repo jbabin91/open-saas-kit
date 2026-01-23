@@ -46,7 +46,7 @@ export type ToastOptions = {
 
 const toastVariants = tv({
   base: [
-    'group/toast relative flex w-full items-start gap-3 rounded-lg border p-4 shadow-lg',
+    'group/toast flex w-full items-center gap-3 rounded-lg border p-4 shadow-lg',
     'entering:animate-in entering:slide-in-from-bottom-full entering:fade-in-0 entering:duration-300',
     'exiting:animate-out exiting:slide-out-to-right-full exiting:fade-out-0 exiting:duration-200',
   ],
@@ -107,21 +107,43 @@ const toastDescriptionVariants = tv({
 
 const toastCloseVariants = tv({
   base: [
-    'absolute right-4 top-4 flex size-5 items-center justify-center rounded-sm transition-colors',
-    'bg-black/5 data-[hovered]:bg-black/10 dark:bg-white/10 dark:data-[hovered]:bg-white/15',
-    'data-[focus-visible]:outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-ring',
+    'flex size-6 shrink-0 items-center justify-center rounded-md transition-colors',
+    'text-(--close-fg)',
+    'data-[hovered]:bg-(--close-bg-hover)',
+    'data-[focus-visible]:outline-none data-[focus-visible]:ring-2 data-[focus-visible]:ring-(--close-ring)',
   ],
   variants: {
     variant: {
-      default: 'text-muted-foreground data-[hovered]:text-foreground',
-      error:
-        'text-red-600 data-[hovered]:text-red-800 dark:text-red-400 dark:data-[hovered]:text-red-200',
-      info: 'text-blue-600 data-[hovered]:text-blue-800 dark:text-blue-400 dark:data-[hovered]:text-blue-200',
-      loading: 'text-muted-foreground data-[hovered]:text-foreground',
-      success:
-        'text-green-600 data-[hovered]:text-green-800 dark:text-green-400 dark:data-[hovered]:text-green-200',
-      warning:
-        'text-amber-600 data-[hovered]:text-amber-800 dark:text-amber-400 dark:data-[hovered]:text-amber-200',
+      default: [
+        '[--close-fg:var(--color-muted-foreground)] [--close-bg-hover:var(--color-muted)/50] [--close-ring:var(--color-ring)]',
+        'dark:[--close-bg-hover:var(--color-muted)/30]',
+        'data-[hovered]:text-foreground',
+      ],
+      error: [
+        '[--close-fg:var(--color-red-600)] [--close-bg-hover:var(--color-red-100)] [--close-ring:var(--color-red-600)]',
+        'dark:[--close-fg:var(--color-red-400)] dark:[--close-bg-hover:var(--color-red-900)/30] dark:[--close-ring:var(--color-red-400)]',
+        'data-[hovered]:text-red-700 dark:data-[hovered]:text-red-300',
+      ],
+      info: [
+        '[--close-fg:var(--color-blue-600)] [--close-bg-hover:var(--color-blue-100)] [--close-ring:var(--color-blue-600)]',
+        'dark:[--close-fg:var(--color-blue-400)] dark:[--close-bg-hover:var(--color-blue-900)/30] dark:[--close-ring:var(--color-blue-400)]',
+        'data-[hovered]:text-blue-700 dark:data-[hovered]:text-blue-300',
+      ],
+      loading: [
+        '[--close-fg:var(--color-muted-foreground)] [--close-bg-hover:var(--color-muted)/50] [--close-ring:var(--color-ring)]',
+        'dark:[--close-bg-hover:var(--color-muted)/30]',
+        'data-[hovered]:text-foreground',
+      ],
+      success: [
+        '[--close-fg:var(--color-green-600)] [--close-bg-hover:var(--color-green-100)] [--close-ring:var(--color-green-600)]',
+        'dark:[--close-fg:var(--color-green-400)] dark:[--close-bg-hover:var(--color-green-900)/30] dark:[--close-ring:var(--color-green-400)]',
+        'data-[hovered]:text-green-700 dark:data-[hovered]:text-green-300',
+      ],
+      warning: [
+        '[--close-fg:var(--color-amber-600)] [--close-bg-hover:var(--color-amber-100)] [--close-ring:var(--color-amber-600)]',
+        'dark:[--close-fg:var(--color-amber-400)] dark:[--close-bg-hover:var(--color-amber-900)/30] dark:[--close-ring:var(--color-amber-400)]',
+        'data-[hovered]:text-amber-700 dark:data-[hovered]:text-amber-300',
+      ],
     },
   },
 });
@@ -270,13 +292,19 @@ export function Toast({ className, toast: toastData, ...props }: ToastProps) {
       {...props}
     >
       <Icon className={toastIconVariants({ variant })} />
-      <ToastContentPrimitive className="flex-1 pr-6" data-slot="toast-content">
-        <Text className="text-sm font-medium" slot="title">
+      <ToastContentPrimitive
+        className="flex flex-1 flex-col"
+        data-slot="toast-content"
+      >
+        <Text className="text-sm font-medium leading-tight" slot="title">
           {toastData.content.title}
         </Text>
         {toastData.content.description && (
           <Text
-            className={toastDescriptionVariants({ variant })}
+            className={cn(
+              toastDescriptionVariants({ variant }),
+              'mt-1 leading-tight',
+            )}
             slot="description"
           >
             {toastData.content.description}
@@ -292,14 +320,16 @@ export function Toast({ className, toast: toastData, ...props }: ToastProps) {
           </Button>
         )}
       </ToastContentPrimitive>
-      <Button
-        aria-label="Close"
-        className={toastCloseVariants({ variant })}
-        data-slot="toast-close"
-        slot="close"
-      >
-        <RiCloseLine className="size-4" />
-      </Button>
+      {variant !== 'loading' && (
+        <Button
+          aria-label="Close"
+          className={toastCloseVariants({ variant })}
+          data-slot="toast-close"
+          slot="close"
+        >
+          <RiCloseLine className="size-4" />
+        </Button>
+      )}
     </ToastPrimitive>
   );
 }
