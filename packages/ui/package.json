@@ -65,7 +65,7 @@
     "@vueless/storybook-dark-mode": "^10.0.6",
     "eslint": "^9.39.2",
     "eslint-plugin-storybook": "^10.2.0",
-    "playwright": "^1.57.0",
+    "playwright": "^1.58.0",
     "shadcn": "^3.7.0",
     "storybook": "^10.2.0",
     "storybook-addon-deep-controls": "^0.10.0",
