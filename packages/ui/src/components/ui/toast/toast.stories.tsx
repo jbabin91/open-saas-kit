@@ -1,19 +1,17 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { ThemeProvider } from 'next-themes';
-import { toast } from 'sonner';
 import { userEvent } from 'storybook/test';
 
 import { Button } from '../button';
-import { Toaster } from './sonner';
+import { toast, Toaster } from './toast';
 
 const meta: Meta<typeof Toaster> = {
   component: Toaster,
   decorators: [
     (Story) => (
-      <ThemeProvider attribute="class" defaultTheme="dark">
+      <>
         <Story />
         <Toaster />
-      </ThemeProvider>
+      </>
     ),
   ],
   parameters: {
@@ -71,8 +69,9 @@ export const WithDescription: Story = {
     <Button
       variant="outline"
       onPress={() =>
-        toast('Event has been created', {
+        toast({
           description: 'Sunday, December 03, 2023 at 9:00 AM',
+          title: 'Event has been created',
         })
       }
     >
@@ -92,11 +91,12 @@ export const WithAction: Story = {
     <Button
       variant="outline"
       onPress={() =>
-        toast('File deleted', {
+        toast({
           action: {
             label: 'Undo',
             onClick: () => toast.success('Restored!'),
           },
+          title: 'File deleted',
         })
       }
     >
@@ -123,6 +123,82 @@ export const PromiseToast: Story = {
       }
     >
       Show Promise Toast
+    </Button>
+  ),
+};
+
+export const SuccessVariant: Story = {
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Show Success' });
+    await userEvent.click(trigger);
+  },
+  render: () => (
+    <Button
+      variant="outline"
+      onPress={() =>
+        toast.success('Changes saved', {
+          description: 'Your profile has been updated.',
+        })
+      }
+    >
+      Show Success
+    </Button>
+  ),
+};
+
+export const ErrorVariant: Story = {
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Show Error' });
+    await userEvent.click(trigger);
+  },
+  render: () => (
+    <Button
+      variant="outline"
+      onPress={() =>
+        toast.error('Upload failed', {
+          description: 'The file size exceeds the 10MB limit.',
+        })
+      }
+    >
+      Show Error
+    </Button>
+  ),
+};
+
+export const WarningVariant: Story = {
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Show Warning' });
+    await userEvent.click(trigger);
+  },
+  render: () => (
+    <Button
+      variant="outline"
+      onPress={() =>
+        toast.warning('Unsaved changes', {
+          description: 'You have unsaved changes that will be lost.',
+        })
+      }
+    >
+      Show Warning
+    </Button>
+  ),
+};
+
+export const InfoVariant: Story = {
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Show Info' });
+    await userEvent.click(trigger);
+  },
+  render: () => (
+    <Button
+      variant="outline"
+      onPress={() =>
+        toast.info('New feature available', {
+          description: 'Check out the new dashboard layout.',
+        })
+      }
+    >
+      Show Info
     </Button>
   ),
 };
