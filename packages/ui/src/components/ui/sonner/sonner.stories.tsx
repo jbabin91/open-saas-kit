@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { ThemeProvider } from 'next-themes';
 import { toast } from 'sonner';
+import { userEvent } from 'storybook/test';
 
 import { Button } from '../button';
 import { Toaster } from './sonner';
@@ -81,6 +82,12 @@ export const WithDescription: Story = {
 };
 
 export const WithAction: Story = {
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', {
+      name: 'Show Toast with Action',
+    });
+    await userEvent.click(trigger);
+  },
   render: () => (
     <Button
       variant="outline"
