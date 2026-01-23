@@ -1,4 +1,5 @@
 # lefthook.yml
+no_tty: true # Prevents terminal escape sequence issues with beads hooks
 output:
   - failure # Only show failed steps
   - execution_out # Show command output for failures
