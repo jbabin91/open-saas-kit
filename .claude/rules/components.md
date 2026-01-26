@@ -164,3 +164,26 @@ import { Button, Input } from '@oakoss/ui';
 // Bad - don't import from relative paths
 import { Button } from '../../../packages/ui/src/button';
 ```
+
+## Storybook Conventions
+
+Stories are co-located with components:
+
+```sh
+packages/ui/src/components/ui/button/
+├── button.tsx           # Component
+├── button.stories.tsx   # Stories
+└── index.ts             # Export
+```
+
+### Story Naming
+
+| Type         | Convention            | Example                                   |
+| ------------ | --------------------- | ----------------------------------------- |
+| Default      | `Default`             | `export const Default: Story`             |
+| Variants     | Variant name          | `Secondary`, `Destructive`, `Ghost`       |
+| Sizes        | Size name             | `Small`, `Large`                          |
+| States       | State description     | `Disabled`, `Loading`                     |
+| Interactions | `{Action}Interaction` | `ClickInteraction`, `KeyboardInteraction` |
+
+For story writing how-to, see the `storybook` skill.

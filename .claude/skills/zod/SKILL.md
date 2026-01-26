@@ -1,10 +1,32 @@
 ---
-paths: '**/*.{ts,tsx}'
+name: zod
+description: Zod v4 schema validation. Use for zod, schema, validation, parse, safeParse, infer, coerce, transform, refine, z.object, z.string, z.email, z.url
 ---
 
 # Zod Schema Validation (v4)
 
-This project uses **Zod v4** for schema validation. Note the syntax differences from v3.
+This project uses **Zod v4**. Note the syntax differences from v3.
+
+## Quick Start
+
+```ts
+import { z } from 'zod';
+
+const UserSchema = z.object({
+  email: z.email(),
+  name: z.string().min(1),
+  age: z.number().optional(),
+});
+
+type User = z.infer<typeof UserSchema>;
+
+const result = UserSchema.safeParse(input);
+if (result.success) {
+  console.log(result.data);
+} else {
+  console.log(result.error);
+}
+```
 
 ## Primitives
 
@@ -99,10 +121,10 @@ type User = z.infer<typeof User>;
 // Modifiers
 User.partial(); // All optional
 User.required(); // All required
-User.pick({ id: true, email: true }); // Pick fields
-User.omit({ age: true }); // Omit fields
-User.extend({ role: z.string() }); // Add fields
-User.merge(OtherSchema); // Merge schemas
+User.pick({ id: true, email: true });
+User.omit({ age: true });
+User.extend({ role: z.string() });
+User.merge(OtherSchema);
 User.passthrough(); // Allow extra keys
 User.strict(); // Reject extra keys
 User.strip(); // Remove extra keys
@@ -113,8 +135,8 @@ User.strip(); // Remove extra keys
 ```ts
 z.array(z.string());
 z.array(z.number()).min(1); // Non-empty
-z.array(z.number()).max(10); // Max items
-z.array(z.number()).length(5); // Exact length
+z.array(z.number()).max(10);
+z.array(z.number()).length(5);
 z.array(z.number()).nonempty(); // Non-empty (typed)
 
 // Tuple
@@ -149,7 +171,7 @@ z.literal(true);
 ```ts
 // Record (string keys by default)
 z.record(z.number()); // { [key: string]: number }
-z.record(z.string(), z.number()); // Same
+z.record(z.string(), z.number());
 
 // Enum keys (v4: all keys required)
 z.record(z.enum(['a', 'b']), z.number()); // { a: number, b: number }
@@ -176,12 +198,10 @@ z.string().catch('fallback');
 
 ## Coercion
 
-Coerce inputs to the target type:
-
 ```ts
 z.coerce.string(); // Converts to string
 z.coerce.number(); // Converts to number
-z.coerce.boolean(); // Falsy → false, truthy → true
+z.coerce.boolean(); // Falsy -> false, truthy -> true
 z.coerce.date(); // Converts to Date
 z.coerce.bigint(); // Converts to BigInt
 ```
@@ -207,12 +227,12 @@ z.stringbool({
 
 ```ts
 // Transform output type
-z.string().transform((val) => val.length); // string → number
-z.string().transform((val) => parseInt(val, 10)); // string → number
+z.string().transform((val) => val.length); // string -> number
+z.string().transform((val) => parseInt(val, 10));
 
 // Overwrite (same type, introspectable)
-z.number().overwrite((val) => val * 2); // number → number
-z.string().overwrite((val) => val.trim()); // string → string
+z.number().overwrite((val) => val * 2);
+z.string().overwrite((val) => val.trim());
 ```
 
 ## Refinements
@@ -265,7 +285,6 @@ const UserSchema = z.object({
   email: z.email(),
 });
 
-// Infer TypeScript type from schema
 type User = z.infer<typeof UserSchema>;
 // { id: string; email: string }
 
@@ -306,3 +325,19 @@ const EnvSchema = z.object({
   NODE_ENV: z.enum(['development', 'production', 'test']),
 });
 ```
+
+## Common Mistakes
+
+| Mistake                      | Correct Pattern                    |
+| ---------------------------- | ---------------------------------- |
+| `z.string().email()`         | `z.email()` (v4 top-level)         |
+| `z.string().url()`           | `z.url()` (v4 top-level)           |
+| Using `parse` without catch  | Use `safeParse` for error handling |
+| Forgetting `.optional()`     | Add when field may be undefined    |
+| Using `any` for unknown data | Use `z.unknown()` instead          |
+
+## Delegation
+
+- **Schema design**: Ask user for field requirements
+- **Complex validation**: Use `superRefine` for multi-field validation
+- **Pattern discovery**: Use `Explore` agent to find existing schemas

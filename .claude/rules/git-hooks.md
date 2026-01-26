@@ -1,4 +1,8 @@
-# Git Hooks & Commit Conventions
+---
+paths: '.git/hooks/**,lefthook.yml,.lefthook/**'
+---
+
+# Git Hooks
 
 ## Hook Ownership
 
@@ -55,111 +59,5 @@ rm -f .git/hooks/post-*.old .git/hooks/pre-push.old .git/hooks/prepare-commit-ms
 Do NOT run `pnpm exec lefthook install` directly—it will fail because
 `pre-commit.old` already exists from beads chaining.
 
-## Commit Message Format (Conventional Commits)
-
-```sh
-type(scope): subject
-
-body (optional)
-
-footer (optional)
-```
-
-### Types
-
-| Type       | Description                               |
-| ---------- | ----------------------------------------- |
-| `feat`     | New features                              |
-| `fix`      | Bug fixes                                 |
-| `docs`     | Documentation changes                     |
-| `style`    | Code style (formatting, no logic changes) |
-| `refactor` | Code changes (neither fix nor feature)    |
-| `perf`     | Performance improvements                  |
-| `test`     | Adding or correcting tests                |
-| `chore`    | Dependencies, tooling, build              |
-| `ci`       | CI configuration changes                  |
-| `revert`   | Revert a previous commit                  |
-
-### Scopes
-
-| Category | Scopes                                                                   |
-| -------- | ------------------------------------------------------------------------ |
-| Apps     | `web`                                                                    |
-| Packages | `auth`, `config`, `database`, `ui`, `eslint-config`, `typescript-config` |
-| Tooling  | `deps`, `ci`                                                             |
-
-Custom scopes allowed. Scope is optional.
-
-### Rules
-
-- Subject: imperative mood, no period, lowercase
-- Header max length: 200 characters
-- Body: optional, use `|` for line breaks in interactive mode
-
-## Markdownlint Rules
-
-**CRITICAL - MD040**: All fenced code blocks MUST have a language specifier:
-
-```markdown
-<!-- Bad - will fail lint -->
-
-` ` `src/routes/
-├── index.tsx` ` `
-
-<!-- Good - has language -->
-
-` ` `sh
-src/routes/
-├── index.tsx
-` ` `
-```
-
-Common language specifiers:
-
-| Content Type       | Language   |
-| ------------------ | ---------- |
-| TypeScript/TSX     | `tsx`      |
-| JavaScript         | `js`       |
-| Shell/directories  | `sh`       |
-| JSON               | `json`     |
-| Markdown templates | `markdown` |
-| Plain text/output  | `text`     |
-| Bash commands      | `bash`     |
-
-Enabled rules with overrides:
-
-| Rule  | Setting         | Description                 |
-| ----- | --------------- | --------------------------- |
-| MD007 | `indent: 2`     | 2-space list indentation    |
-| MD040 | enabled         | Fenced blocks need language |
-| MD046 | `style: fenced` | Use fenced code blocks      |
-
-Disabled rules:
-
-- MD001 - Heading level increments
-- MD012 - Multiple blank lines
-- MD013 - Line length
-- MD024 - Duplicate heading content
-- MD025 - Multiple top-level headings
-- MD026 - Trailing punctuation in headings
-- MD029 - Ordered list prefix style
-- MD033 - Inline HTML
-- MD036 - Emphasis as heading
-- MD037 - Spaces in emphasis
-- MD041 - First line must be heading
-- MD060 - Table column alignment
-
-Uses `.gitignore` patterns automatically.
-
-### Running Markdownlint
-
-```sh
-# Correct - uses configured glob pattern
-pnpm lint:md
-
-# Correct - specific markdown files
-pnpm lint:md .claude/rules/react.md
-
-# Wrong - directory path overrides glob, may lint non-md files
-pnpm lint:md .claude/
-```
+For commit message format (conventional commits), see the `git-workflow` skill.
+For markdownlint configuration, see the `markdown.md` rule.

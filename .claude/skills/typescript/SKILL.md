@@ -1,28 +1,17 @@
 ---
-paths: '**/*.{ts,tsx,js,jsx}'
+name: typescript
+description: TypeScript and unicorn linting patterns. Use for typescript, array, for-of, reduce, forEach, throw, catch, modern js, es modules, string, number, error handling
 ---
 
-# Unicorn Rules (eslint-plugin-unicorn recommended)
+# TypeScript & Unicorn Patterns
 
-The project uses `unicorn.configs.recommended` which enforces 100+ rules.
-
-## Project Overrides
-
-```ts
-// null IS allowed (unicorn/no-null: off)
-const value = null; // Good
-
-// Abbreviations ARE allowed (unicorn/prevent-abbreviations: off)
-const btn = document.querySelector('button'); // Good (not forced to buttonElement)
-const handleErr = (e) => {}; // Good (not forced to error)
-```
+This project uses `unicorn.configs.recommended` which enforces 100+ rules for modern JavaScript/TypeScript.
 
 ## Arrays (IMPORTANT - Common Errors)
 
 ```ts
 // NO reduce - use for-of or other methods
 array.reduce((acc, item) => acc + item, 0); // Bad
-// Use for-of, map, filter, etc.
 let sum = 0;
 for (const item of array) sum += item; // Good
 
@@ -48,7 +37,7 @@ array.find((x) => x.id === id); // not array.filter(...)[0]
 array.some((x) => x.valid); // not array.filter(...).length > 0
 array.flat(); // not [].concat(...array)
 array.flatMap((x) => x.items); // not array.map(...).flat()
-array.toSorted(); // not [...array].sort() or array.slice().sort()
+array.toSorted(); // not [...array].sort()
 array.toReversed(); // not [...array].reverse()
 ```
 
@@ -71,14 +60,14 @@ str.at(-1); // not str.charAt(str.length - 1)
 ```ts
 // Always use "throw new Error" with message
 throw new Error('Something went wrong'); // Good
-throw Error('msg'); // Bad - missing "new"
-throw 'error'; // Bad - not an Error object
-throw new Error(); // Bad - missing message
+throw Error('msg');     // Bad - missing "new"
+throw 'error';          // Bad - not an Error object
+throw new Error();      // Bad - missing message
 
 // Catch variable must be named "error"
-catch (error) {} // Good
-catch (e) {} // Bad
-catch (err) {} // Bad
+catch (error) {}  // Good
+catch (e) {}      // Bad
+catch (err) {}    // Bad
 
 // Use TypeError for type errors
 if (typeof x !== 'string') throw new TypeError('Expected string');
@@ -138,19 +127,17 @@ if (!condition) {
 if (condition) {
 } else {
 } // Good - Flip the condition
-
-// No lonely if in else - use else if
 ```
 
 ## Functions & Classes
 
 ```ts
 // Move functions to highest possible scope
+
 // NO static-only classes
 class Utils {
   static helper() {}
 } // Bad
-// Use plain object or functions
 const utils = { helper() {} }; // Good
 function helper() {} // Good
 
@@ -187,7 +174,7 @@ Number.parseInt(x); // not parseInt(x)
 
 // Use Math.trunc
 Math.trunc(x); // Good
-x | 0; // Bad - Bitwise operators for truncation
+x | 0; // Bad - Bitwise for truncation
 ~~x; // Bad
 
 // Use numeric separators
@@ -221,3 +208,21 @@ export { x } from './module';
 // NO document.cookie - use a cookie library
 // NO empty files
 ```
+
+## Common Mistakes
+
+| Mistake                   | Correct Pattern                   |
+| ------------------------- | --------------------------------- |
+| `array.reduce()`          | Use `for-of` loop                 |
+| `array.forEach()`         | Use `for-of` loop                 |
+| `for (let i = 0; ...)`    | Use `for-of` or `array.entries()` |
+| `catch (e)`               | Use `catch (error)`               |
+| `throw 'error'`           | Use `throw new Error('message')`  |
+| `array[array.length - 1]` | Use `array.at(-1)`                |
+| `[...array].sort()`       | Use `array.toSorted()`            |
+| `import fs from 'fs'`     | Use `import fs from 'node:fs'`    |
+
+## Delegation
+
+- **Pattern discovery**: Use `Explore` agent to find existing patterns
+- **Linting issues**: Run `pnpm lint:fix` to auto-fix

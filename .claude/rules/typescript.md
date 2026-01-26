@@ -4,6 +4,19 @@ paths: '**/*.{ts,tsx}'
 
 # TypeScript Rules
 
+## Unicorn Overrides
+
+```ts
+// null IS allowed (unicorn/no-null: off)
+const value = null; // Good
+
+// Abbreviations ARE allowed (unicorn/prevent-abbreviations: off)
+const btn = document.querySelector('button'); // Good
+const handleErr = (e) => {}; // Good
+```
+
+For full unicorn patterns (arrays, strings, errors), see the `typescript` skill.
+
 ## Naming Conventions
 
 | Style                  | Use For                                |
